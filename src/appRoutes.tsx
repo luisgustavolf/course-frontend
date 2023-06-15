@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import { LoginPage } from './pages/public/login'
 import { AuthContext } from './contexts/authContext/context'
-import { PrivateRoutes } from './pages/private/routes'
+import { HomePage } from './pages/private/home'
+import { LoginPage } from './pages/public/login'
 
 export function AppRoutes() {
   const authContext = React.useContext(AuthContext)
@@ -12,14 +12,14 @@ export function AppRoutes() {
       <Routes>
 
         {authContext.isAuth &&
-          <Route path='/*' element={<PrivateRoutes />} />
+          <Route path='/'>
+            <Route index element={<HomePage />} />
+            <Route path='*' element={<Navigate to={'/'} />} />
+          </Route>
         }
 
         <Route path='/login' element={<LoginPage />} />
-
-        {!authContext.isAuth &&
-          <Route path='*' element={<Navigate to={'/login'} />} />
-        }
+        <Route path='*' element={<Navigate to={'/login'} />} />
       </Routes>
     </BrowserRouter>
   )
